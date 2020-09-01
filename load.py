@@ -4,12 +4,11 @@ import pandas as pd
 import numpy as np
 import json
 from datetime import datetime
-
 import glob
 
 
 def load():
-
+    # Change this to only load fetchimages of non failed tracing (or extract both logics)
     activations = None
     performance = None
 
@@ -18,7 +17,7 @@ def load():
         for a in glob.glob(f+"/activations/*.json"):
             fname = a[a.rindex("/")+1:]
             typeName =  "_".join(fname.split("_")[1:-1])
-    
+
             activation = loadActivations(a,typeName,ename)
             if (activations is None):
                 activations = activation
