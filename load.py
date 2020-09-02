@@ -7,17 +7,21 @@ from datetime import datetime
 import glob
 
 
-def load():
+def load(skip_failed=True, only_fetchImages=False):
     # Change this to only load fetchimages of non failed tracing (or extract both logics)
     activations = None
     performance = None
 
     for f in glob.glob("data/*"):
         ename = f
+        if "failiure" in f and skip_failed:
+            continue
         for a in glob.glob(f+"/activations/*.json"):
+
             fname = a[a.rindex("/")+1:]
             typeName =  "_".join(fname.split("_")[1:-1])
-
+            if "pu_" in fname and only_fetchImages:
+                continue
             activation = loadActivations(a,typeName,ename)
             if (activations is None):
                 activations = activation
@@ -88,3 +92,5 @@ def eql(k,l,c=True):
         return list(filter(lambda x:k == x[0],l))
 def time(k,l):
     return list(map(lambda x:(x[0],datetime.fromisoformat(x[1][:-1])),filter(lambda x:k in x[0],l)))
+
+load()
